@@ -3,7 +3,7 @@ ActiveAdmin.register Product do
 # Permit all fields from ActiveAdmin to be editable
 permit_params :title, :image_1, :image_2, :image_3, :image_4,
   :image_5, :price, :collection_date, :description,
-  :is_featured, :is_sold_out#
+  :is_featured, :is_sold_out
 
 # Customize ActiveAdmin dashboard
   index do

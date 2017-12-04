@@ -4,10 +4,8 @@ class PagesController < ApplicationController
   		@featured_products = Product.where(is_featured: true)
   	end
 
-def info
-end
+  def info
 
-
-
+  end
 
 end
