@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   # we only want a user to see ONE cart
   resource :cart
 
+  resources :orders 
+
   get "info", to: "pages#info"
 
   root "pages#home"
