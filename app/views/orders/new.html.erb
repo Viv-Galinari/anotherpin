@@ -1,5 +1,7 @@
 <h1>Checkout</h1>
 
+Total number of items: <%= @order.order_items.size %>
+
 <%= simple_form_for @order do |f| %>
      <%= f.input :first_name %>
       <%= f.input :last_name %>
@@ -12,5 +14,30 @@
       <%= f.input :city %>
       <%= f.input :postal_code %>
 
+      <!-- Empty divs for stripe to handle payment -->
+      <div id="cards-errors"></div>
+      <div id="cards"></div>
+
       <%= f.button :submit, "Submit order"  %>
 <% end %>
+
+<!-- Stripe setup -->
+<script>
+//set up Stripe API with my secret key
+  var stripe = Stripe("<%=Rails.application.secrets.stripe_secret_key%>");
+  var elements = stripe.elements();
+
+// Create an instance of the card Element
+var card = elements.create('card', {style: style});
+
+// Add an instance of the card Element into the `card-element` <div>
+card.mount('#card-element');
+
+//Using JQuery, submit form to Stripe first, then if ok, we submit it our site
+$("form.new_order").on("submit", function(e) {
+
+     //stop form from submitting
+     e.preventDefault()
+
+})
+</script>

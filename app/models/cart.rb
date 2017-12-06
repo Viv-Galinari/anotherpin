@@ -32,9 +32,8 @@ class Cart < ApplicationRecord
      order_items.all.each do |item|
        @total = @total + item.product.price_in_pounds * item.quantity
      end
+
      @total
-
    end
-
 
 end

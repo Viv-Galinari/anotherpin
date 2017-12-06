@@ -5,6 +5,7 @@
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script src="https://js.stripe.com/v3/"></script>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
@@ -21,12 +22,12 @@
             Cart (<%= number_to_currency @current_cart.total_price_in_pounds, unit: "£"%>)
             <% end %>
       </nav>
-        <% if flash[:success].present? %>
-          <div class="flash message">
-            <%= flash[:success] %>
-          </div>
-        <% end %>
     </header>
+    <% if flash[:success].present? %>
+      <div class="flash message">
+        <%= flash[:success] %>
+      </div>
+    <% end %>
     <%= yield %>
     <footer> Copyright 2017 </footer>
   </body>
