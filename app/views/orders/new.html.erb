@@ -3,41 +3,48 @@
 Total number of items: <%= @order.order_items.size %>
 
 <%= simple_form_for @order do |f| %>
-     <%= f.input :first_name %>
-      <%= f.input :last_name %>
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
 
-      <%= f.input :email %>
+  <%= f.input :email %>
 
-      <%= f.input :country %>
-      <%= f.input :address_1 %>
-      <%= f.input :address_2 %>
-      <%= f.input :city %>
-      <%= f.input :postal_code %>
+  <%= f.input :country %>
+  <%= f.input :address_1 %>
+  <%= f.input :address_2 %>
+  <%= f.input :city %>
+  <%= f.input :postal_code %>
 
-      <!-- Empty divs for stripe to handle payment -->
-      <div id="cards-errors"></div>
-      <div id="cards"></div>
+  <!-- Empty divs for stripe to handle payment -->
+  <div id="card-errors"></div>
+  <div id="card"></div>
 
-      <%= f.button :submit, "Submit order"  %>
+  <%= f.button :submit, "Submit order"  %>
 <% end %>
 
 <!-- Stripe setup -->
 <script>
 //set up Stripe API with my secret key
-  var stripe = Stripe("<%=Rails.application.secrets.stripe_secret_key%>");
+  var stripe = Stripe("<%= Rails.application.secrets.stripe_secret_key %>");
   var elements = stripe.elements();
 
 // Create an instance of the card Element
-var card = elements.create('card', {style: style});
+  var card = elements.create('card', {style: style});
 
-// Add an instance of the card Element into the `card-element` <div>
-card.mount('#card-element');
+  // Add an instance of the card Element into the `card-element` <div>
+  card.mount('#card');
 
-//Using JQuery, submit form to Stripe first, then if ok, we submit it our site
-$("form.new_order").on("submit", function(e) {
-
-     //stop form from submitting
-     e.preventDefault()
-
-})
+  //Using JQuery, submit form to Stripe first, then if ok, we submit it our site
+  $("form.new_order").on("submit", function(e) {
+    // stop form from submitting
+    e.preventDefault()
+    
+    stripe.createToken(card).then(function (result) {
+      if (result.error) {
+        $("#card-errors").html(result.error.message)
+      } else {
+        $("form.new_order").append("<input type=hidden name='order[stripe_token]' value=" + result.token.id + ">")
+        $("form.new_order").get(0).submit()
+      }
+    })
+  })
 </script>
